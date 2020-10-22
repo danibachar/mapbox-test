@@ -14,8 +14,6 @@ class ViewController: UIViewController {
     
     var mapView: MGLMapView?
     
-    weak var parkingView: CustomAnnotationView?
-    
     var userLoction: CLLocationCoordinate2D? {
         mapView?.userLocation?.coordinate
     }
@@ -60,10 +58,8 @@ extension ViewController: MGLMapViewDelegate {
         let size = CGSize(width: 32, height: 40) // tried different sizes - even cover the hole user
         v.layer.zPosition = CGFloat(Int.max) // tried setting to fron
         v.bounds = CGRect(origin: .zero, size: size)
-        parkingView = v
         return v
     }
-//        return nil
       guard annotation is MGLUserLocation, mapView.userLocation != nil else {
         return nil
       }
@@ -79,9 +75,6 @@ extension ViewController: MGLMapViewDelegate {
       userLocationAnnotationView?.cornerRadius = 80 / 2
       let size = CGSize(width: 80, height: 80)
       userLocationAnnotationView?.bounds = CGRect(origin: .zero, size: size)
-        // tried disable and set to back
-//      userLocationAnnotationView?.isEnabled = false
-//      userLocationAnnotationView?.layer.zPosition = -1
 
       return userLocationAnnotationView
     }
@@ -96,14 +89,6 @@ extension ViewController: MGLMapViewDelegate {
     
     func mapView(_ mapView: MGLMapView, tapOnCalloutFor annotation: MGLAnnotation) {
       mapView.deselectAnnotation(annotation, animated: true)
-    }
-    
-    func mapView(_ mapView: MGLMapView, didUpdate userLocation: MGLUserLocation?) {
-        print("DB: - didUpdate")
-        if let p = parkingView {
-            self.mapView?.bringSubviewToFront(p)
-        }
-        
     }
     
     func mapView(_ mapView: MGLMapView, didSelect annotation: MGLAnnotation) {
@@ -176,19 +161,6 @@ class UserLocationAnnotationView: MGLUserLocationAnnotationView, CourseUpdatable
     fatalError("init(coder:) has not been implemented")
   }
     
-//    override func update() {
-//        if frame.isNull {
-//        frame = CGRect(x: 0, y: 0, width: size, height: size)
-//        return setNeedsLayout()
-//        }
-//
-//        // Check whether we have the user’s location yet.
-//        if CLLocationCoordinate2DIsValid(userLocation!.coordinate) {
-//        setupLayers()
-//        updateHeading()
-//        }
-//    }
-  
   override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     print("DB: - user selected!")
